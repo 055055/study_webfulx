@@ -1,7 +1,7 @@
 package com.study.webfulx.handler;
 
 import com.study.webfulx.utils.GitHubDto;
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Configuration
+@RequiredArgsConstructor
 public class ClientDemoHandler {
 
+    private final WebClient webClient;
     public static final String GITHUB_BASE_URL = "https://api.github.com";
 
     /**
@@ -22,7 +24,6 @@ public class ClientDemoHandler {
      * @return
      */
     public Mono<ServerResponse> clientDemo1(ServerRequest req) {
-        WebClient webClient = WebClient.create(GITHUB_BASE_URL);
 
         //쿼리 스트링에 user가 포함되어 있는지 체크
         Optional<String> userName = req.queryParam("user");
@@ -32,7 +33,7 @@ public class ClientDemoHandler {
 
         //비동기 호출(비블록)
         Mono<List<GitHubDto>> values = webClient.get()
-                .uri("users/" + userName.get() + "/repos")
+                .uri(GITHUB_BASE_URL+"/users/{name}/repos",userName.get())
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<GitHubDto>>() {
                 });
