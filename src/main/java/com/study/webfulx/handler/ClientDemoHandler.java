@@ -45,7 +45,6 @@ public class ClientDemoHandler {
         });
     }
 
-    @Bean
     public RouterFunction<ServerResponse> clientRouterRule() {
         return RouterFunctions.route(RequestPredicates.GET("/client/get/1"), this::clientDemo1);
     }

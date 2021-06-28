@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class GreetingRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(GreetingHandler greetingHandler) {
+    public RouterFunction<ServerResponse> greetingRoute(GreetingHandler greetingHandler) {
         return RouterFunctions
                 .route(RequestPredicates.GET("/hello").and(RequestPredicates.accept(
                         (MediaType.TEXT_PLAIN))), greetingHandler::hello);

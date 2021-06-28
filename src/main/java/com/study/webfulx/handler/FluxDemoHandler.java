@@ -1,6 +1,5 @@
 package com.study.webfulx.handler;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.*;
@@ -23,7 +22,6 @@ public class FluxDemoHandler {
                 .body(stream, Integer.class);
     }
 
-    @Bean
     public RouterFunction<ServerResponse> fluxRouterRule() {
         return RouterFunctions.route(RequestPredicates.GET("/flux/1"), this::fluxHandler);
     }

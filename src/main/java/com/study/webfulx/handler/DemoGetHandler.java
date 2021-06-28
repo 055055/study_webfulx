@@ -53,7 +53,6 @@ public class DemoGetHandler {
         return ServerResponse.ok().body(Mono.just(req.queryParams()), Map.class);
     }
 
-    @Bean
     public RouterFunction<ServerResponse> getRouteRule() {
         return RouterFunctions.route(RequestPredicates.GET("/demo/get/1"), this::demoGet1)
                 .andRoute(RequestPredicates.GET("/demo/get/2/{name}"), this::demoGet2)

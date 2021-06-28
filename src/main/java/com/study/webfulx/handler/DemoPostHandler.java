@@ -42,7 +42,6 @@ public class DemoPostHandler {
         return ServerResponse.ok().body(req.bodyToMono(SampleDto.class).map(ConvertUtil::convert), Output.class);
     }
 
-    @Bean
     public RouterFunction<ServerResponse> postRouteRule() {
         return RouterFunctions.route(RequestPredicates.POST("/demo/post/1"), this::demoPost1)
                 .andRoute(RequestPredicates.POST("/demo/post/2"), this::demoPost2)
