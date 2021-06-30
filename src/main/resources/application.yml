@@ -1,0 +1,6 @@
+logging:
+  file:
+    path: /Users/hong/Logs/kotlin-spring
+  level:
+    root: info
+    com.study.webfulx: debug
