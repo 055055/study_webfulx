@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
@@ -131,7 +132,30 @@ public class ClientDemoHandler {
         });
     }
 
-    public RouterFunction<ServerResponse> clientRouterRule() {
+
+    /**
+     * WebClinet를 사용한 경우(GET)
+     *
+     * @param req
+     * @return
+     */
+    public Mono<List<GitHubDto>> clientDemo6(String userName) {
+        //쿼리 스트링에 user가 포함되어 있는지 체크
+        if (!StringUtils.hasText(userName)) {
+            throw new RuntimeException("user is Required");
+        }
+
+        //비동기 호출(비블록)
+        Mono<List<GitHubDto>> values = webClient.get()
+                .uri(GITHUB_BASE_URL + "/users/{name}/repos", userName)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+        values.subscribe(System.out::println);
+        return values;
+    }
+
+        public RouterFunction<ServerResponse> clientRouterRule() {
         return RouterFunctions.route(RequestPredicates.GET("/client/get/1"), this::clientDemo1)
                 .andRoute(RequestPredicates.GET("/client/get/2"), this::clientDemo2)
                 .andRoute(RequestPredicates.GET("/client/get/3"), this::clientDemo3)

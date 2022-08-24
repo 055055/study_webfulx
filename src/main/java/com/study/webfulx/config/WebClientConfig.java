@@ -34,6 +34,24 @@ public class WebClientConfig {
                 .clientConnector(new ReactorClientHttpConnector(httpClient)).build();
     }
 
+    @Bean
+    public WebClient testWebClient() {
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1500)
+                .doOnConnected(conn ->
+                        conn.addHandlerLast(new ReadTimeoutHandler(1500, TimeUnit.MILLISECONDS))
+                                .addHandlerLast(new WriteTimeoutHandler(1500, TimeUnit.MILLISECONDS)));
+
+        return WebClient.builder()
+                .filters(functions -> {
+                    functions.add(logRequest());
+                    functions.add(logResponse());
+                })
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .baseUrl("https://api.github.com")
+                .build();
+    }
+
 
     public ExchangeFilterFunction logRequest() {
         return (clientRequest, next) -> {
