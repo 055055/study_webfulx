@@ -23,5 +23,4 @@ public class TestHandler {
                 .bodyToFlux(GitHubDto.class);
         return values;
     }
-
 }

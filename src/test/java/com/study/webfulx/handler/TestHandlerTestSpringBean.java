@@ -2,40 +2,31 @@ package com.study.webfulx.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.study.webfulx.config.TestWebClientConfig;
 import com.study.webfulx.utils.GitHubDto;
 import mockwebserver3.MockResponse;
-import mockwebserver3.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.study.webfulx.config.TestWebClientConfig.mockWebServer;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class TestHandlerTest {
-    MockWebServer mockWebServer;
+@Import(TestWebClientConfig.class)
+@SpringBootTest(classes = TestHandler.class)
+class TestHandlerTestSpringBean {
+
+    @Autowired
     TestHandler handler;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
-    @BeforeEach
-    void setUp() {
-        mockWebServer = new MockWebServer();
-        WebClient webClient = WebClient.create(mockWebServer.url("/github").toString());
-        handler = new TestHandler(webClient);
-    }
-
-    @AfterEach
-    void shutDown() throws IOException {
-        mockWebServer.shutdown();
-    }
 
     @DisplayName("webMockServer Test")
     @Test
